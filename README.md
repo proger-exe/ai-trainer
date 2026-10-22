@@ -4,21 +4,26 @@
 [![AI Trainer — Практика общения: от урока до разбора ситуации.](docs/portfolio/card.png)](docs/portfolio/card.svg)
 <!-- portfolio-card:end -->
 
-Telegram bot that trains communication skills: structured lessons (block → lesson → step), quizzes, points and insights, plus an LLM that analyses user-written situations and flags toxic phrasing. Ships with an HTTP API so a website can run the onboarding quiz and hand results back to the bot.
+Учебный курс, который проходит внутри Telegram: короткие шаги, вопросы для проверки и разбор ситуации, которую описал сам пользователь. AI Trainer соединяет структурированные уроки с ответами языковой модели.
 
-## Features
+Участник проходит вводный опрос, получает задания и накапливает прогресс. Автор курса загружает содержание из JSON; администратор управляет пользователями и рассылками.
 
-- **Lessons**: modules loaded from JSON (`docs/training_module_format.md`), progress and scoring per user, scheduler for reminders.
-- **Onboarding**: 15-question quiz either inside the bot or as a WebApp on your site, with results delivered via REST or a Supabase poller.
-- **AI analysis**: two prompt models (`models/analysis.md`, `models/toxic.md`) dispatched through AtlantSDK, an aiogram-style router for LLM calls (handlers, filters, priorities, CAS-safe sessions).
-- **Admin**: broadcast, user management, insight editor, lesson import tools (`lessons_export_tools/`).
-- **API server** (`api_server.py`): aiohttp, per-IP rate limiting, endpoints for quiz results and user lookup.
+## От содержания курса до практики
 
-## Stack
+- Уроки организованы как блоки, уроки и шаги. Формат описан в `docs/training_module_format.md`; сервисы сохраняют прогресс, баллы и инсайты.
+- Вводный опрос из 15 вопросов можно пройти в боте или WebApp на сайте. Результаты возвращаются через REST API либо Supabase poller.
+- Для разбора ситуаций и токсичных формулировок используются отдельные промпты `models/analysis.md` и `models/toxic.md`, вызовы проходят через AtlantSDK.
+- Планировщик отправляет напоминания; инструменты в `lessons_export_tools/` помогают импортировать учебные модули.
 
-Python 3.11+, aiogram 3.13, aiohttp, aiosqlite, pydantic 2, google-generativeai. SQLite for storage. No Docker needed: one process runs the bot, the API server and the poller.
+Проект показывает, как связать контент, пользовательский прогресс и LLM в одном продукте. HTTP API на aiohttp обслуживает результаты опроса и поиск пользователей с ограничением частоты запросов по IP.
 
-## Run
+Обсудить похожий проект: [sh3l.beer](https://sh3l.beer).
+
+## Стек
+
+Python 3.11+, aiogram 3.13, aiohttp, aiosqlite, pydantic 2 и google-generativeai. Данные хранятся в SQLite. Бот, API и poller работают в одном процессе; Docker для запуска не требуется. AtlantSDK маршрутизирует LLM-вызовы через обработчики, фильтры и приоритеты с CAS-защитой сессий.
+
+## Запуск
 
 ```bash
 python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
@@ -26,15 +31,15 @@ cp .env.example .env     # TELEGRAM_BOT_TOKEN, GEMINI_API_TOKEN, ADMIN_IDS
 .venv/bin/python main.py
 ```
 
-Import a lesson module:
+Импорт учебного модуля:
 
 ```bash
 .venv/bin/python -m lessons_export_tools.import_lessons_from_json lessons_export_tools/lessons.json
 ```
 
-Production: `deploy/setup.sh` + `deploy/bot.service` (systemd).
+Для развёртывания на сервере предусмотрены `deploy/setup.sh` и systemd-unit `deploy/bot.service`.
 
-## Layout
+## Структура проекта
 
 ```
 main.py                  entry point: bot + API server + poller
@@ -48,6 +53,6 @@ lessons_export_tools/    lesson JSON + import / migration scripts
 docs/                    architecture, modules, onboarding integration, lesson format
 ```
 
-## License
+## Лицензия
 
 MIT
