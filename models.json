@@ -1,0 +1,20 @@
+[
+    {
+        "Name": "ANALYSIS",
+        "FromFile": true,
+        "Priority": 0,
+        "SystemInstruction": "models/analysis.md",
+        "Generation": {
+            "max_output_tokens": 4096
+        }
+    },
+    {
+        "Name": "TOXIC",
+        "FromFile": true,
+        "Priority": 1,
+        "SystemInstruction": "models/toxic.md",
+        "Generation": {
+            "max_output_tokens": 4096
+        }
+    }
+]
