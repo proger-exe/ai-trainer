@@ -1,7 +1,7 @@
 # AI Trainer
 
 <!-- portfolio-card:start -->
-[![sh3lby.code — нейтральная обложка](docs/portfolio/card.png)](docs/portfolio/card.svg)
+[![AI Trainer — Практика общения: от урока до разбора ситуации.](docs/portfolio/card.png)](docs/portfolio/card.svg)
 <!-- portfolio-card:end -->
 
 Telegram bot that trains communication skills: structured lessons (block → lesson → step), quizzes, points and insights, plus an LLM that analyses user-written situations and flags toxic phrasing. Ships with an HTTP API so a website can run the onboarding quiz and hand results back to the bot.
